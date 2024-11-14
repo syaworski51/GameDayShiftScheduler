@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model GameDayShiftScheduler.Models.Sport
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Details";
+    bool userIsAdmin = User.IsInRole("Admin");
+}
+
+<h1>@Model.Name</h1>
+
+<div>
+    <hr />
+    
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

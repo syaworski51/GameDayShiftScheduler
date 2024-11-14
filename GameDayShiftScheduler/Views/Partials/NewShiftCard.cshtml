@@ -1,0 +1,41 @@
+﻿@using GameDayShiftScheduler.Models.InputForms
+@model ShiftForm
+@{
+    List<TeamMember> teamMembers = ViewBag.TeamMembers;
+}
+
+<div class="col-6 card">
+    <div class="form-group">
+        <label class="control-label" asp-for="SportId"></label>
+        <select class="form-control" id="sports" asp-for="SportId" asp-items="@ViewBag.Sports"></select>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" asp-for="Title"></label>
+        <input type="text" class="form-control" asp-for="Title" placeholder="Title..." />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" asp-for="Date"></label>
+        <input type="date" class="form-control" asp-for="Date" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" asp-for="StartTime"></label>
+        <input type="time" class="form-control" asp-for="StartTime" />
+
+        <label class="control-label" asp-for="EndTime"></label>
+        <input type="time" class="form-control" asp-for="EndTime" />
+    </div>
+
+    <div class="form-group" id="scheduled-team-members">
+        <p>
+            Select team members below.
+        </p>
+        @foreach (var teamMember in teamMembers)
+        {
+            @Html.CheckBox("SelectedTeamMembers", new { value = teamMember, @class = "btn-check" })
+            @Html.Label("SelectedTeamMembers", teamMember.FullName, new { @class = "btn btn-outline-primary" })
+        }
+    </div>
+</div>

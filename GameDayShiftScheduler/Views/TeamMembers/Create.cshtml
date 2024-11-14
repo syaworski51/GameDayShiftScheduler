@@ -1,0 +1,66 @@
+﻿@using GameDayShiftScheduler.Models.InputForms
+@model TeamMemberCreateForm
+
+@{
+    ViewData["Title"] = "New Team Member";
+
+    const string GENERATE_PASSWORD = "Generate Password";
+    const string CREATE_PASSWORD_MANUALLY = "Create Password Manually";
+}
+
+<h1>New Team Member</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmailAddress" class="control-label"></label>
+                <input asp-for="EmailAddress" class="form-control" />
+                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="password-options">
+                <label asp-for="OneTimePasswordOption" class="control-label"></label>
+                <div class="form-check">
+                    <input type="radio" id="generate-password" name="OneTimePasswordOption" asp-for="OneTimePasswordOption" value="@GENERATE_PASSWORD" />
+                    <label class="control-label" for="generate-password">@GENERATE_PASSWORD</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="create-password-manually" name="OneTimePasswordOption" asp-for="OneTimePasswordOption" value="@CREATE_PASSWORD_MANUALLY" checked />
+                    <label class="control-label" for="create-password-manually">@CREATE_PASSWORD_MANUALLY</label>
+                </div>
+            </div>
+            <div class="form-group" id="password-fields">
+                <div class="form-group" id="password">
+                    <label asp-for="Password" for="password-field"></label>
+                    <input type="password" class="form-control" id="password-field" asp-for="Password" />
+                </div>
+                <div class="form-group" id="confirm-password">
+                    <label asp-for="ConfirmPassword" for="confirm-password-field"></label>
+                    <input type="password" class="form-control" id="confirm-password-field" asp-for="ConfirmPassword" />
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

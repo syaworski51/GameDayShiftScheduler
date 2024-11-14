@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Shift>
+
+@{
+    ViewData["Title"] = "Shifts";
+
+    Dictionary<Shift, List<ScheduledShift>> scheduledShifts = ViewBag.ScheduledShifts;
+
+    bool userIsAdmin = User.IsInRole("Admin");
+
+    string GetShiftTimesString(Shift shift)
+    {
+        string startTime = shift.StartTime.ToShortTimeString();
+        string endTime = shift.EndTime.ToShortTimeString();
+        
+        return $"{startTime} - {endTime}";
+    }
+}
+
+<h1>Shifts</h1>
+
+<p>
+    @if (userIsAdmin)
+    {
+        <a class="btn btn-primary" asp-action="Create">+ Shift</a>
+    }
+</p>
+
+<div class="container">
+    @if (Model.Any())
+    {
+        foreach (var shift in Model)
+        {
+            List<ScheduledShift> shiftsScheduled = scheduledShifts[shift];
+
+            <div class="row">
+                <div class="col-10 card container">
+                    <div class="row">
+                        <div class="col-2 container">
+                            <div class="row">
+                                <div class="col">
+                                    @shift.StartTime.DayOfWeek.ToString().ToUpper()
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @shift.StartTime.Day
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @shift.StartTime.ToString("MMM").ToUpper()
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7 container">
+                            <div class="row">
+                                <div class="col">
+                                    @GetShiftTimesString(shift)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @shift.Title
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    @@ @shift.Location
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <ul class="scheduled-team-members-list">
+                                @foreach (var teamMember in shiftsScheduled)
+                                {
+                                    <li>@teamMember.TeamMember.FullName</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

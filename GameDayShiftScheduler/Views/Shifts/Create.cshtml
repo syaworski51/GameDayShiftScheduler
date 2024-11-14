@@ -1,0 +1,36 @@
+﻿@using GameDayShiftScheduler.Models.InputForms
+@model ShiftForm
+
+@{
+    ViewData["Title"] = "Create";
+
+    SelectList sportsList = ViewBag.Sports;
+}
+
+<h1>New Shifts</h1>
+
+<hr />
+<div class="row">
+    <div class="col">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" id="new-shifts">
+                <partial name="../Partials/NewShiftCard.cshtml" />
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-primary" onclick="AddNewShift()">+ Shift</button>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Publish</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
