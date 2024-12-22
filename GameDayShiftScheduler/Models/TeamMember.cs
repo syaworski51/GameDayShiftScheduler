@@ -27,6 +27,9 @@ namespace GameDayShiftScheduler.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        /// <summary>
+        ///     This team member's full name.
+        /// </summary>
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
     }

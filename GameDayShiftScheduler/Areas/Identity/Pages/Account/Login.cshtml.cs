@@ -123,11 +123,26 @@ namespace GameDayShiftScheduler.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    // Find the user by their email
                     var user = await _userManager.FindByNameAsync(Input.Email);
                     _logger.LogInformation("User logged in.");
 
+                    // If the user has not used their one-time password at login time...
                     if (!user.OneTimePasswordUsed)
+                    {
+                        // Now they have. Set their OneTimePasswordUsed flag to True to reflect this.
+                        user.OneTimePasswordUsed = true;
+
+                        // Log that they have now used their one-time password.
+                        _logger.LogInformation("User has used their one-time password.");
+
+                        // Update their record in the user manager and save the changes
+                        await _userManager.UpdateAsync(user);
+                        await _context.SaveChangesAsync();
+
+                        // Redirect the user to the Change Password page so that they can change their password
                         return RedirectToPage("/Account/Manage/ChangePassword", "Identity", new { userId = user.Id });
+                    }
                     
                     return LocalRedirect(returnUrl);
                 }
