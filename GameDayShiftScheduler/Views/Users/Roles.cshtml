@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model Dictionary<ApplicationUser, List<bool>>
+
+@{
+    List<IdentityRole> roles = ViewBag.Roles;
+}
+
+<h1>Roles</h1>
+
+<form asp-action="Roles" method="get">
+    Search:
+    <input type="text" name="search" value="@ViewBag.Search" autofocus />
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>User</th>
+            @foreach (var role in roles)
+            {
+                <th>@role.Name</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Keys)
+        {
+            <tr>
+                <th>@user.FullName</th>
+                
+                @foreach (var role in roles)
+                {
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

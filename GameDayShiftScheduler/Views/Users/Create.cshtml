@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using GameDayShiftScheduler.Models.InputForms
+@model UserCreateForm
+
+@{
+    List<IdentityRole> roles = ViewBag.Roles;
+    Guid organizationId = ViewBag.OrganizationId;
+}
+
+<h1>New User</h1>
+<hr />
+<partial name="../Partials/Message.cshtml" />
+
+<form asp-action="Create">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="OrganizationId" value="@organizationId" />
+    <div class="form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input type="text" asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input type="text" asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailAddress" class="control-label"></label>
+        <input type="email" asp-for="EmailAddress" class="form-control" />
+        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label"></label>
+        <input type="password" asp-for="Password" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword" class="control-label"></label>
+        <input type="password" asp-for="ConfirmPassword" class="form-control" />
+    </div>
+    <div class="form-group">
+        Assign Roles
+        @foreach (var role in roles) 
+        {
+            @Html.CheckBox("Roles", new { value = role })
+            @Html.Label("Roles", role.Name, new { @class = "control-label" })
+        }
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </div>
+</form>

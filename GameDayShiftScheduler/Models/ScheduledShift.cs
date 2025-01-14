@@ -17,6 +17,18 @@ namespace GameDayShiftScheduler.Models
         public int Id { get; set; }
 
         /// <summary>
+        ///     The ID of the organization this scheduled shift belongs to.
+        /// </summary>
+        [ForeignKey(nameof(Organization))]
+        public Guid OrganizationId { get; set; }
+
+        /// <summary>
+        ///     The organization this scheduled shift belongs to.
+        /// </summary>
+        [Display(Name = "Organization")]
+        public Organization Organization { get; set; }
+
+        /// <summary>
         ///     The ID of the sport for which this shift is being scheduled.
         /// </summary>
         [ForeignKey(nameof(Sport))]
@@ -44,12 +56,13 @@ namespace GameDayShiftScheduler.Models
         ///     The ID of the team member this shift is being scheduled for.
         /// </summary>
         [ForeignKey(nameof(TeamMember))]
-        public Guid TeamMemberId { get; set; }
+        [MaxLength(450)]
+        public string TeamMemberId { get; set; }
 
         /// <summary>
         ///     The team member this shift is being scheduled for.
         /// </summary>
         [Display(Name = "Team Member")]
-        public TeamMember TeamMember { get; set; }
+        public ApplicationUser TeamMember { get; set; }
     }
 }

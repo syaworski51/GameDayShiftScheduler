@@ -49,3 +49,8 @@ a:hover {
 .form-check-label {
     margin-left: 5px;
 }
+
+.small-icon {
+    width: 10px;
+    height: 10px;
+}

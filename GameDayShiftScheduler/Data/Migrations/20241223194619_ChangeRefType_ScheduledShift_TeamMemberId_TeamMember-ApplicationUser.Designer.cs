@@ -4,6 +4,7 @@ using GameDayShiftScheduler.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameDayShiftScheduler.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241223194619_ChangeRefType_ScheduledShift_TeamMemberId_TeamMember-ApplicationUser")]
+    partial class ChangeRefType_ScheduledShift_TeamMemberId_TeamMemberApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,9 +72,6 @@ namespace GameDayShiftScheduler.Data.Migrations
                     b.Property<bool>("OneTimePasswordUsed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -80,9 +80,6 @@ namespace GameDayShiftScheduler.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ProfilePicturePath")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SMSEnabled")
                         .HasColumnType("bit");
@@ -107,27 +104,7 @@ namespace GameDayShiftScheduler.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("OrganizationId");
-
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("GameDayShiftScheduler.Models.Organization", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("LogoPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Organizations");
                 });
 
             modelBuilder.Entity("GameDayShiftScheduler.Models.ScheduledShift", b =>
@@ -138,29 +115,24 @@ namespace GameDayShiftScheduler.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ShiftId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SportId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TeamMemberId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId");
-
                     b.HasIndex("ShiftId");
 
                     b.HasIndex("SportId");
 
-                    b.HasIndex("TeamMemberId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ScheduledShifts");
                 });
@@ -184,9 +156,6 @@ namespace GameDayShiftScheduler.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("SportId")
                         .HasColumnType("uniqueidentifier");
 
@@ -198,8 +167,6 @@ namespace GameDayShiftScheduler.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("SportId");
 
@@ -223,6 +190,25 @@ namespace GameDayShiftScheduler.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sports");
+                });
+
+            modelBuilder.Entity("GameDayShiftScheduler.Models.TeamMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeamMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -358,25 +344,8 @@ namespace GameDayShiftScheduler.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GameDayShiftScheduler.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("GameDayShiftScheduler.Models.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Organization");
-                });
-
             modelBuilder.Entity("GameDayShiftScheduler.Models.ScheduledShift", b =>
                 {
-                    b.HasOne("GameDayShiftScheduler.Models.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GameDayShiftScheduler.Models.Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftId")
@@ -389,36 +358,26 @@ namespace GameDayShiftScheduler.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameDayShiftScheduler.Models.ApplicationUser", "TeamMember")
+                    b.HasOne("GameDayShiftScheduler.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("TeamMemberId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Organization");
 
                     b.Navigation("Shift");
 
                     b.Navigation("Sport");
 
-                    b.Navigation("TeamMember");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GameDayShiftScheduler.Models.Shift", b =>
                 {
-                    b.HasOne("GameDayShiftScheduler.Models.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("GameDayShiftScheduler.Models.Sport", "Sport")
                         .WithMany()
                         .HasForeignKey("SportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Organization");
 
                     b.Navigation("Sport");
                 });

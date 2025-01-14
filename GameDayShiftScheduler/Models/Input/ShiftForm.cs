@@ -9,6 +9,6 @@
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
         public int TeamMembersRequired { get; set; }
-        public List<TeamMember> SelectedTeamMembers { get; set; }
+        public List<ApplicationUser> SelectedTeamMembers { get; set; }
     }
 }

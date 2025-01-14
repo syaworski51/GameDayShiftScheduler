@@ -38,13 +38,14 @@ namespace GameDayShiftScheduler.Models
         ///     The ID of the team member that initiated this trade request.
         /// </summary>
         [ForeignKey(nameof(TeamMember1))]
-        public Guid TeamMember1Id { get; set; }
+        [MaxLength(450)]
+        public string TeamMember1Id { get; set; }
 
         /// <summary>
         ///     The team member that initiated this trade request.
         /// </summary>
         [Display(Name = "Team Member #1")]
-        public TeamMember TeamMember1 { get; set; }
+        public ApplicationUser TeamMember1 { get; set; }
 
         /// <summary>
         ///     The ID of the shift that the initiating team member wants to trade.
@@ -53,7 +54,7 @@ namespace GameDayShiftScheduler.Models
         public Guid Shift1Id { get; set; }
 
         /// <summary>
-        ///     The ID of the shift that the initiating team member wants to trade.
+        ///     The shift that the initiating team member wants to trade.
         /// </summary>
         [Display(Name = "Shift #1")]
         public ScheduledShift Shift1 { get; set; }
@@ -62,13 +63,14 @@ namespace GameDayShiftScheduler.Models
         ///     The ID of the intended recipient of this trade request.
         /// </summary>
         [ForeignKey(nameof(TeamMember2))]
-        public Guid TeamMember2Id { get; set; }
+        [MaxLength(450)]
+        public string TeamMember2Id { get; set; }
 
         /// <summary>
         ///     The ID of the intended recipient of this trade request.
         /// </summary
         [Display(Name = "Team Member #2")]
-        public TeamMember TeamMember2 { get; set; }
+        public ApplicationUser TeamMember2 { get; set; }
 
         /// <summary>
         ///     The ID of the shift that the initiating team member wants in return.

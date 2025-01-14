@@ -13,6 +13,6 @@ namespace GameDayShiftScheduler.Data
         public DbSet<Sport> Sports { get; set; } = default!;
         public DbSet<Shift> Shifts { get; set; } = default!;
         public DbSet<ScheduledShift> ScheduledShifts { get; set; } = default!;
-        public DbSet<TeamMember> TeamMembers { get; set; } = default!;
+        public DbSet<Organization> Organizations { get; set; } = default!;
     }
 }

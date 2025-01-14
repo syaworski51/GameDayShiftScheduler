@@ -4,6 +4,7 @@ using GameDayShiftScheduler.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameDayShiftScheduler.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241224232823_NewTable_Organizations")]
+    partial class NewTable_Organizations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,9 +84,6 @@ namespace GameDayShiftScheduler.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProfilePicturePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("SMSEnabled")
                         .HasColumnType("bit");
 
@@ -147,7 +147,7 @@ namespace GameDayShiftScheduler.Data.Migrations
                     b.Property<Guid>("SportId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("TeamMemberId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
@@ -160,7 +160,7 @@ namespace GameDayShiftScheduler.Data.Migrations
 
                     b.HasIndex("SportId");
 
-                    b.HasIndex("TeamMemberId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ScheduledShifts");
                 });
@@ -223,6 +223,25 @@ namespace GameDayShiftScheduler.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sports");
+                });
+
+            modelBuilder.Entity("GameDayShiftScheduler.Models.TeamMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TeamMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -389,9 +408,9 @@ namespace GameDayShiftScheduler.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameDayShiftScheduler.Models.ApplicationUser", "TeamMember")
+                    b.HasOne("GameDayShiftScheduler.Models.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("TeamMemberId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -401,7 +420,7 @@ namespace GameDayShiftScheduler.Data.Migrations
 
                     b.Navigation("Sport");
 
-                    b.Navigation("TeamMember");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GameDayShiftScheduler.Models.Shift", b =>

@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using GameDayShiftScheduler.Data;
 using GameDayShiftScheduler.Models;
 using GameDayShiftScheduler.Data.Migrations;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameDayShiftScheduler.Controllers
 {
     public class ShiftsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ShiftsController(ApplicationDbContext context)
+        public ShiftsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Shifts
@@ -56,15 +59,17 @@ namespace GameDayShiftScheduler.Controllers
         }
 
         // GET: Shifts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var sports = _context.Sports.OrderBy(s => s.Name);
             ViewBag.Sports = new SelectList(sports, "Id", "Name");
 
-            var teamMembers = _context.TeamMembers
+            var teamMembers = await _userManager.GetUsersInRoleAsync("TeamMember");
+            teamMembers = teamMembers
                 .OrderBy(m => m.FirstName)
-                .ThenBy(m => m.LastName);
-            ViewBag.TeamMembers = teamMembers.ToList();
+                .ThenBy(m => m.LastName)
+                .ToList();
+            ViewBag.TeamMembers = teamMembers;
 
             return View();
         }

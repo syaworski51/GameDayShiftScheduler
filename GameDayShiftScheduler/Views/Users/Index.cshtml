@@ -1,6 +1,61 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@using GameDayShiftScheduler.Models.Messages
+@model IEnumerable<ApplicationUser>
+
 @{
+    ViewBag.Title = "Users";
+    Message? message = ViewBag.Message;
+
+    string YesOrNo(bool value, string trueString = "Yes", string falseString = "No")
+    {
+        return value ? trueString : falseString;
+    }
 }
 
 <h1>Users</h1>
+<partial name="../Partials/Message.cshtml" />
 
+<form asp-action="Index" method="get">
+    Roles:
+    @Html.DropDownList("role", (IEnumerable<SelectListItem>) ViewBag.Roles, new { onchange="submit()" })
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><input type="checkbox" /></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>SMS Enabled?</th>
+            <th>Email Enabled?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model) 
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" />
+                </td>
+                <td class="container">
+                    <div class="row">
+                        <div class="col-1">
+                            <img class="small-icon" src="@user.ProfilePicturePath" />
+                        </div>
+                        <div class="col-11">
+                            <a asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">@user.FullName</a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    @user.Email
+                </td>
+                <td>
+                    @YesOrNo(user.SMSEnabled)
+                </td>
+                <td>
+                    @YesOrNo(user.EmailEnabled)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

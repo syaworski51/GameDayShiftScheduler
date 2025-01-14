@@ -22,6 +22,18 @@ namespace GameDayShiftScheduler.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        ///     The ID of the organization this shift belongs to.
+        /// </summary>
+        [ForeignKey(nameof(Organization))]
+        public Guid OrganizationId { get; set; }
+
+        /// <summary>
+        ///     The organization this shift belongs to.
+        /// </summary>
+        [Display(Name = "Organization")]
+        public Organization Organization { get; set; }
+
+        /// <summary>
         ///     The ID of the sport for this shift.
         /// </summary>
         [ForeignKey(nameof(Sport))]
